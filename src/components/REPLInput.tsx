@@ -25,29 +25,40 @@ export function REPLInput(props: REPLInputProps) {
   // Manages the current amount of times the button is clicked
   const [count, setCount] = useState<number>(0);
 
+  
+
+  
+
   // This function is triggered when the button is clicked.
   function handleSubmit(commandString: string) {
-    setCount(count + 1);
-    // CHANGED
+    const splitCommandString : String[] = commandString.split(" ");
+    const validInputs: String[] = ["load_file", "view", "search", "mode"];
+
+    if (validInputs.includes(splitCommandString[0])){ // makes sure input is valid
+      setCount(count + 1);
     
-    const resultObject: InputObject = {
-      command: commandString,
-      result: [["temporary output result"]]
-    };
-
-    props.setHistory([...props.history, resultObject]);
-    //{command: commandString, output: "output result"}
-    setCommandString("");
-
-    if (commandString == "mode"){
-      if (props.mode == "brief") {
-        props.setMode("verbose");
-      }
-      else {
-        props.setMode("brief");
+      const resultObject: InputObject = {
+        command: commandString,
+        result: [["temporary output result"]]
+      };
+  
+      props.setHistory([...props.history, resultObject]);
+  
+      setCommandString("");
+  
+      if (commandString == "mode"){
+        if (props.mode == "brief") {
+          props.setMode("verbose");
+        }
+        else {
+          props.setMode("brief");
+        }
       }
     }
-    
+    else{
+      //tell user their input is invalid
+    }
+
   }
   /**
    * We suggest breaking down this component into smaller components, think about the individual pieces

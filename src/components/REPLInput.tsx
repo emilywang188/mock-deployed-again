@@ -31,15 +31,13 @@ export function REPLInput(props: REPLInputProps) {
 
   // This function is triggered when the button is clicked.
   function handleSubmit(commandString: string) {
-    const splitCommandString : String[] = commandString.split(" ");
-    const validInputs: String[] = ["load_file", "view", "search", "mode"];
-
-    if (validInputs.includes(splitCommandString[0])){ // makes sure input is valid
+  
       setCount(count + 1);
-    
+
+      const myResult = determineResult(commandString);
       const resultObject: InputObject = {
         command: commandString,
-        result: [["temporary output result"]]
+        result: [[myResult]]
       };
   
       props.setHistory([...props.history, resultObject]);
@@ -54,16 +52,22 @@ export function REPLInput(props: REPLInputProps) {
           props.setMode("brief");
         }
       }
-    }
-    else{
-      //tell user their input is invalid
-    }
+
 
   }
   /**
    * We suggest breaking down this component into smaller components, think about the individual pieces
    * of the REPL and how they connect to each other...
    */
+
+  function determineResult(commandString: String){
+    
+    const splitCommandString : String[] = commandString.split(" ");
+    const validInputs: String[] = ["load_file", "view", "search", "mode"];
+    //if (validInputs.includes(splitCommandString[0])){ // makes sure input is valid
+    return "dummy result";
+  }
+
   return (
     <div className="repl-input">
       {/* This is a comment within the JSX. Notice that it's a TypeScript comment wrapped in

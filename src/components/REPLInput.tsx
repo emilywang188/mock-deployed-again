@@ -2,12 +2,13 @@ import "../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
 import { ScriptElementKindModifier } from "typescript";
+import { InputObject } from "./REPL";
 
 interface REPLInputProps {
   // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
   // CHANGED
-  history: string[];
-  setHistory: Dispatch<SetStateAction<string[]>>;
+  history: InputObject[];
+  setHistory: Dispatch<SetStateAction<InputObject[]>>;
 
   //mode props
   mode: string;
@@ -15,6 +16,8 @@ interface REPLInputProps {
 }
 // You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
 // REPLInput(history: string[], setHistory: Dispatch<SetStateAction<string[]>>)
+
+
 export function REPLInput(props: REPLInputProps) {
   // Remember: let React manage state in your webapp.
   // Manages the contents of the input box
@@ -26,7 +29,14 @@ export function REPLInput(props: REPLInputProps) {
   function handleSubmit(commandString: string) {
     setCount(count + 1);
     // CHANGED
-    props.setHistory([...props.history, commandString]);
+    
+    const resultObject: InputObject = {
+      command: commandString,
+      result: [["temporary output result"]]
+    };
+
+    props.setHistory([...props.history, resultObject]);
+    //{command: commandString, output: "output result"}
     setCommandString("");
 
     if (commandString == "mode"){

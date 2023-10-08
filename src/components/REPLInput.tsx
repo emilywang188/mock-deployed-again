@@ -1,12 +1,17 @@
 import "../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
+import { ScriptElementKindModifier } from "typescript";
 
 interface REPLInputProps {
   // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
   // CHANGED
   history: string[];
   setHistory: Dispatch<SetStateAction<string[]>>;
+
+  //mode props
+  mode: string;
+  setMode: Dispatch<SetStateAction<string>>;
 }
 // You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
 // REPLInput(history: string[], setHistory: Dispatch<SetStateAction<string[]>>)
@@ -23,6 +28,16 @@ export function REPLInput(props: REPLInputProps) {
     // CHANGED
     props.setHistory([...props.history, commandString]);
     setCommandString("");
+
+    if (commandString == "mode"){
+      if (props.mode == "brief") {
+        props.setMode("verbose");
+      }
+      else {
+        props.setMode("brief");
+      }
+    }
+    
   }
   /**
    * We suggest breaking down this component into smaller components, think about the individual pieces
@@ -46,6 +61,9 @@ export function REPLInput(props: REPLInputProps) {
       <button onClick={() => handleSubmit(commandString)}>
         Submitted {count} times
       </button>
+      <p>
+        mode: {props.mode}
+      </p>
     </div>
   );
 }

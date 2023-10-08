@@ -49,15 +49,20 @@ export function REPLInput(props: REPLInputProps) {
 
   function determineResult(commandString: String) {
     const splitCommandString: String[] = commandString.split(" ");
-    // const validInputs: String[] = ["load_file", "view", "search", "mode"];
-    //if (validInputs.includes(splitCommandString[0])){ // makes sure input is valid
   
     switch (splitCommandString[0]) {
       case "load_file":
+        // see if filepath name exists as a key in our fake hashmap
+          // if so, say "loaded successfully" and use a use state hook or useRef to store the name of the filepath
+          // if not, say "doesn't exist"
         return "loading....";
       case "view":
+        // if nothing is currently loaded, say "error: must load first"
+        // if something is currently loaded, return the value of the filepath key and format as an "HTML table"
         return "viewing....";
       case "search":
+        // if nothing is currently loaded, say "error: must load first"
+        // if something is currently loaded, return an arbitrary result for mocking purposes
         return "searching....";
       case "mode":
         if (props.mode == "brief") {
@@ -68,6 +73,7 @@ export function REPLInput(props: REPLInputProps) {
         return "mode changed!";
       default:
         return "invalid input!";
+        // make this more descriptive
     }
 
   }

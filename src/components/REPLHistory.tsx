@@ -31,8 +31,18 @@ export function REPLHistory(props: REPLHistoryProps) {
           <p>
             Command: {item.command}
             <br></br>
-            Result: {item.result}
-            
+            Result:{" "}
+            <center>
+              <table>
+                {item.result.map((row, index) => (
+                  <tr>
+                    {row.map((col, index) => (
+                      <td>{col}</td>
+                    ))}
+                  </tr>
+                ))}
+              </table>
+            </center>
           </p>
         ))}
       </div>

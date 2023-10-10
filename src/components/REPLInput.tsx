@@ -51,57 +51,55 @@ export function REPLInput(props: REPLInputProps) {
    * of the REPL and how they connect to each other...
    */
 
-  function makeHTMLTable(myArray: string[][]) {
-    var result = "<table border=1>";
-    for(var i=0; i<myArray.length; i++) {
-        result += "<tr>";
-        for(var j=0; j<myArray[i].length; j++){
-            result += "<td>"+myArray[i][j]+"</td>";
-        }
-        result += "</tr>";
-    }
-    result += "</table>";
+  // function makeHTMLTable(myArray: string[][]) {
+  //   var result = "<table border=1>";
+  //   for(var i=0; i<myArray.length; i++) {
+  //       result += "<tr>";
+  //       for(var j=0; j<myArray[i].length; j++){
+  //           result += "<td>"+myArray[i][j]+"</td>";
+  //       }
+  //       result += "</tr>";
+  //   }
+  //   result += "</table>";
 
-    return result;
-  }
-  
+  //   return result;
+  // }
 
   function determineResult(commandString: String) {
     const splitCommandString: string[] = commandString.split(" ");
-  
+
     switch (splitCommandString[0]) {
       case "load_file":
-        if (splitCommandString[1] in mockLoadView){
+        if (splitCommandString[1] in mockLoadView) {
           setFilepath(splitCommandString[1]);
-          return splitCommandString[1] + " loaded successfully!";
-        }
-        else {
-          return "Failed to load " + splitCommandString[1] + ". File doesn't exist."
+          return [[splitCommandString[1] + " loaded successfully!"]];
+        } else {
+          return (
+            [["Failed to load " + splitCommandString[1] + ". File doesn't exist."]]
+          );
         }
       case "view":
-        if (filepath == ""){
-          return "Error: Must load a file first."
+        if (filepath == "") {
+          return [["Error: Must load a file first."]];
+        } else {
+          return mockLoadView[filepath];
         }
-        else{
-          return makeHTMLTable(mockLoadView[filepath]);
-        }
-        // if something is currently loaded, return the value of the filepath key and format as an "HTML table"
+      // if something is currently loaded, return the value of the filepath key and format as an "HTML table"
       case "search":
         // if nothing is currently loaded, say "error: must load first"
         // if something is currently loaded, return an arbitrary result for mocking purposes
-        return "searching....";
+        return [["searching...."]];
       case "mode":
         if (props.mode == "brief") {
           props.setMode("verbose");
         } else {
           props.setMode("brief");
         }
-        return "mode changed!";
+        return [["mode changed!"]];
       default:
-        return "invalid input!";
-        // make this more descriptive
+        return [["invalid input!"]];
+      // make this more descriptive
     }
-
   }
 
   return (

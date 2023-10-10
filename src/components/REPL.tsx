@@ -13,7 +13,7 @@ import { REPLInput } from "./REPLInput";
 */
 export interface InputObject {
   command: string;
-  result: string;
+  result: string[][];
 }
 
 export default function REPL() {

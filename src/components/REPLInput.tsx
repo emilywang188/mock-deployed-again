@@ -51,20 +51,6 @@ export function REPLInput(props: REPLInputProps) {
    * of the REPL and how they connect to each other...
    */
 
-  // function makeHTMLTable(myArray: string[][]) {
-  //   var result = "<table border=1>";
-  //   for(var i=0; i<myArray.length; i++) {
-  //       result += "<tr>";
-  //       for(var j=0; j<myArray[i].length; j++){
-  //           result += "<td>"+myArray[i][j]+"</td>";
-  //       }
-  //       result += "</tr>";
-  //   }
-  //   result += "</table>";
-
-  //   return result;
-  // }
-
   function determineResult(commandString: String) {
     const splitCommandString: string[] = commandString.split(" ");
 
@@ -120,7 +106,9 @@ export function REPLInput(props: REPLInputProps) {
       <button onClick={() => handleSubmit(commandString)}>
         Submitted {count} times
       </button>
-      <p>mode: {props.mode}</p>
+      <p>
+        <b>mode:</b> {props.mode}
+      </p>
     </div>
   );
 }

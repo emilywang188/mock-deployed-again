@@ -16,7 +16,9 @@ export function REPLHistory(props: REPLHistoryProps) {
         {/* CHANGED */}
 
         {props.history.map((item, index) => (
-          <p>Command: {item.command}</p>
+          <p>
+            <b>Command:</b> {item.command}
+          </p>
         ))}
       </div>
     );
@@ -29,9 +31,9 @@ export function REPLHistory(props: REPLHistoryProps) {
 
         {props.history.map((item, index) => (
           <p>
-            Command: {item.command}
+            <b>Command:</b> {item.command}
             <br></br>
-            Result:{" "}
+            <b>Result:</b>
             <center>
               <table>
                 {item.result.map((row, index) => (

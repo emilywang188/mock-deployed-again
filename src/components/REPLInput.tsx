@@ -3,7 +3,9 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
 import { ScriptElementKindModifier } from "typescript";
 import { InputObject } from "./REPL";
-import { mockLoadView } from "../mock-data";
+import { mockData } from "../mock-data";
+import splitSpacesExcludeQuotes from 'quoted-string-space-split';
+
 
 interface REPLInputProps {
   // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
@@ -51,40 +53,50 @@ export function REPLInput(props: REPLInputProps) {
    * of the REPL and how they connect to each other...
    */
 
-  function determineResult(commandString: String) {
-    const splitCommandString: string[] = commandString.split(" ");
-
-    switch (splitCommandString[0]) {
+  function determineResult(commandString: string) {
+    const splitCommandString: string[] = splitSpacesExcludeQuotes(commandString);
+    const command = splitCommandString[0].toLowerCase();
+    switch (command) {
       case "load_file":
-        if (splitCommandString[1] in mockLoadView) {
+        if (splitCommandString.length != 2){
+          return [["Error: Invalid load request. Use the 'load_file <filepath>' command."]];
+        }
+        if (splitCommandString[1] in mockData) {
           setFilepath(splitCommandString[1]);
           return [[splitCommandString[1] + " loaded successfully!"]];
         } else {
           return (
-            [["Failed to load " + splitCommandString[1] + ". File doesn't exist."]]
+            [["Error: Failed to load " + splitCommandString[1] + ". File doesn't exist."]]
           );
         }
       case "view":
-        if (filepath == "") {
-          return [["Error: Must load a file first."]];
-        } else {
-          return mockLoadView[filepath];
+        if (splitCommandString.length != 1){
+          return [["Error: Invalid view request. Use the 'view' command to view the most recently loaded file."]];
         }
-      // if something is currently loaded, return the value of the filepath key and format as an "HTML table"
+        if (filepath == "") {
+          return [["Error: Must load a file first. Use the 'load_file <filepath>' command."]];
+        } else {
+          return mockData[filepath];
+        }
       case "search":
-        // if nothing is currently loaded, say "error: must load first"
-        // if something is currently loaded, return an arbitrary result for mocking purposes
-        return [["searching...."]];
+        if (splitCommandString.length < 2 || splitCommandString.length > 3){
+          return [["Error: Invalid search format. Use the 'search <optional column identifier> <value>' command."]];
+        }
+        if (filepath == "") {
+          return [["Error: Must load a file first. Use the 'load_file <filepath>' command."]];
+        } 
+        else {
+          return mockData[filepath];
+        }
       case "mode":
         if (props.mode == "brief") {
           props.setMode("verbose");
         } else {
           props.setMode("brief");
         }
-        return [["mode changed!"]];
+        return [["Mode changed!"]];
       default:
-        return [["invalid input!"]];
-      // make this more descriptive
+        return [["Command not recognized. Recognized commands include 'mode', 'view', 'load <filepath>', and 'search <optional column identifier> <value>'"]];
     }
   }
 

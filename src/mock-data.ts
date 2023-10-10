@@ -1,8 +1,4 @@
-export const mockSearch = {
-
-}
-
-export const mockLoadView: { [key: string]: string[][] } = {
+export const mockData: { [key: string]: string[][] } = {
     "pizza.csv": [["Name", "Flavor", "Number of slices", "Restaurant"], 
               ["Pepperoni", "Savory", "8", "Andrews"],
               ["Hawaiian", "Sweet", "10", "The Ratty"],

@@ -10,6 +10,12 @@ test('has title', async ({ page }) => {
   await expect(page).toHaveTitle(/Mock/);
 });
 
+test("load pizza.csv", async ({ page }) => {
+  await page.getByPlaceholder("Enter command here!").fill("load_file pizza.csv");
+  await page.getByRole('button').click();
+  await(expect(page.getByTestId("output")).toContainText("pizza.csv loaded successfully!"));
+});
+
 // test('get started link', async ({ page }) => {
 //   await page.goto('https://playwright.dev/');
 

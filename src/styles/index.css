@@ -30,32 +30,58 @@ h1 {
 
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+  border-width: 3px;
+  border-color: rgb(152, 156, 201);
+  border-style:outset;
   padding: 0.6em 1.2em;
+  color:#213547;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #d9d9ed;
   cursor: pointer;
   transition: border-color 0.25s;
+  transition: background-color 0.25s;
+
 }
 button:hover {
-  border-color: #646cff;
+  background-color: rgb(170, 170, 201);
+  border-color: #585b81;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+button:active {
+  opacity: 75%;
 }
+
+td {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top:0px;
+  padding-bottom:20px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background:rgb(238, 240, 244);
+}
+
+::-webkit-scrollbar-thumb {
+    background:rgb(190, 201, 219);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(169, 189, 217);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: rgb(147, 159, 199);}
 
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+
 }

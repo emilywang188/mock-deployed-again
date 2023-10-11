@@ -6,120 +6,123 @@ import { InputObject } from "./REPL";
 import { mockData } from "../mock-data";
 import splitSpacesExcludeQuotes from 'quoted-string-space-split';
 
-
+/**
+ * Interface that represents REPLInput's props, which are the history (shared state with REPLHistory),
+ * mode ("brief" by default, also shared state), and their respective useState hooks, 
+ * setHistory and setMode.
+ */
 interface REPLInputProps {
-  // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
-  // CHANGED
   history: InputObject[];
   setHistory: Dispatch<SetStateAction<InputObject[]>>;
-
-  //mode props
   mode: string;
   setMode: Dispatch<SetStateAction<string>>;
 }
-// You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
-// REPLInput(history: string[], setHistory: Dispatch<SetStateAction<string[]>>)
 
+/**
+ * Function that handles the user input to the command line.
+ *
+ * @param props history (list of InputObjects that are the command/result pairs), setHistory (useState hook),
+ *              mode (string, "brief" or "verbose"), setMode (useState hook).
+ * @returns 
+ */
 export function REPLInput(props: REPLInputProps) {
-  // Remember: let React manage state in your webapp.
-  // Manages the contents of the input box
-  const [commandString, setCommandString] = useState<string>("");
-  // Manages the current amount of times the button is clicked
-  const [count, setCount] = useState<number>(0);
+  const [commandString, setCommandString] = useState<string>(""); // manages contents of command line box
+  const [count, setCount] = useState<number>(0); // manages click counter on submit button **DELETE**
+  const [filepath, setFilepath] = useState<string>(""); // manages currently-loaded filepath
 
-  // Manages the curently loaded filepath
-  const [filepath, setFilepath] = useState<string>("");
-
-  // This function is triggered when the button is clicked.
-  function handleSubmit(commandString: string) {
+  /**
+   * Function called when the "submit" button is clicked.
+   * 
+   * @param commandString 
+   * @returns 
+   */
+  function handleSubmit(commandString: string) { 
     setCount(count + 1);
 
     if (commandString.length == 0) {
       return;
     }
 
-    const myResult = determineResult(commandString);
-    const resultObject: InputObject = {
-      command: commandString,
+    const myResult = determineResult(commandString); // helper function determines result
+    const resultObject: InputObject = {              // as a string[][], InputObject created
+      command: commandString,                        // from command + result
       result: myResult,
     };
 
-    props.setHistory([...props.history, resultObject]);
-
-    setCommandString("");
+    props.setHistory([...props.history, resultObject]); // adds InputObject to history
+    setCommandString(""); // resets command line to empty
   }
-  /**
-   * We suggest breaking down this component into smaller components, think about the individual pieces
-   * of the REPL and how they connect to each other...
-   */
 
+  /**
+   * Helper function that determines what the result of the user's command should be based
+   * on the command's comments/validity.
+   * 
+   * @param commandString the command input from the user
+   * @returns the result of the command (a success message, error message, or actual results)
+   *          as a 2D array of strings
+   */
   function determineResult(commandString: string) {
     const splitCommandString: string[] = splitSpacesExcludeQuotes(commandString);
     const command = splitCommandString[0].toLowerCase();
     switch (command) {
-      case "load_file":
-        if (splitCommandString.length != 2){
+      case "load_file": // if the user's command started with load_file
+        if (splitCommandString.length != 2){ // if the user's input doesn't fit load format
           return [["Error: Invalid load request. Use the 'load_file <filepath>' command."]];
         }
-        if (splitCommandString[1] in mockData) {
-          setFilepath(splitCommandString[1]);
+        if (splitCommandString[1] in mockData) { // if the file name is in our mock data, 
+          setFilepath(splitCommandString[1]);    // save the filepath and return success message
           return [[splitCommandString[1] + " loaded successfully!"]];
         } else {
           return (
             [["Error: Failed to load " + splitCommandString[1] + ". File doesn't exist."]]
           );
         }
-      case "view":
-        if (splitCommandString.length != 1){
+      case "view": // if the user's command started with view
+        if (splitCommandString.length != 1){ // if the user didn't just enter "view"
           return [["Error: Invalid view request. Use the 'view' command to view the most recently loaded file."]];
         }
-        if (filepath == "") {
+        if (filepath == "") { // if a file isn't saved in filepath yet
           return [["Error: Must load a file first. Use the 'load_file <filepath>' command."]];
         } else {
-          return mockData[filepath];
+          return mockData[filepath]; // returns value (2D string array) of the key (filepath)
         }
-      case "search":
-        if (splitCommandString.length < 2 || splitCommandString.length > 3){
+      case "search": // if the user's command started with search
+        if (splitCommandString.length < 2 || splitCommandString.length > 3){ // if user's format was wrong
           return [["Error: Invalid search format. Use the 'search <optional column identifier> <value>' command."]];
         }
-        if (filepath == "") {
+        if (filepath == "") { // if a file isn't saved in filepath yet
           return [["Error: Must load a file first. Use the 'load_file <filepath>' command."]];
         } 
         else {
           return mockData[filepath];
         }
-      case "mode":
+      case "mode": // if user entered "mode"
         if (props.mode == "brief") {
           props.setMode("verbose");
         } else {
           props.setMode("brief");
         }
-        return [["Mode changed!"]];
-      default:
+        return [["Mode changed!"]]; // swaps the mode using useState hook
+      default: // if the user enters anything that doesn't start with one of our commands
         return [["Command not recognized. Recognized commands include 'mode', 'view', 'load <filepath>', and 'search <optional column identifier> <value>'"]];
     }
   }
 
   return (
     <div className="repl-input">
-      {/* This is a comment within the JSX. Notice that it's a TypeScript comment wrapped in
-            braces, so that React knows it should be interpreted as TypeScript */}
-      {/* I opted to use this HTML tag; you don't need to. It structures multiple input fields
-            into a single unit, which makes it easier for screenreaders to navigate. */}
       <fieldset>
         <legend>Enter a command:</legend>
-        <ControlledInput
+        <ControlledInput          // instantiates ControlledInput, where user actually inputs command
           value={commandString}
           setValue={setCommandString}
           ariaLabel={"Command input"}
         />
-      </fieldset>
-      {/* TODO: Currently this button just counts up, can we make it push the contents of the input box to the history?*/}
-      <button onClick={() => handleSubmit(commandString)}>
+      </fieldset><br></br>
+      <button onClick={() => handleSubmit(commandString)}> {/**calls handleSubmit on button click*/}
         Submitted {count} times
       </button>
       <p>
-        <b>mode:</b> {props.mode}
+        <b>Current mode:</b> {props.mode}
       </p>
     </div>
   );

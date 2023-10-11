@@ -1,60 +1,55 @@
 import "../styles/main.css";
 import { InputObject } from "./REPL";
 
+/**
+ * Interface that represents props of REPLHistory: history--a list of InputObjects 
+ * (the command/result pairs that result from user interaction), and mode--a string that
+ * defines the mode (brief or verbose) in which the user is viewing history.
+ */
 interface REPLHistoryProps {
-  // TODO: Fill with some shared state tracking all the pushed commands
-  // CHANGED
   history: InputObject[];
   mode: String;
 }
-export function REPLHistory(props: REPLHistoryProps) {
-  if (props.mode == "brief") {
-    return (
-      <div className="repl-history">
-        {/* This is where command history will go */}
-        {/* TODO: To go through all the pushed commands... try the .map() function! */}
-        {/* CHANGED */}
 
-        {props.history.map((item, index) => (
-          <p>
-            <center>
-              <table>
-                {item.result.map((row, index) => (
-                  <tr>
-                    {row.map((col, index) => (
-                      <td>{col}</td>
-                    ))}
-                  </tr>
-                ))}
-              </table>
-            </center>
-          </p>
+/**
+ * 
+ * @param props includes both history (an empty list of InputObjects) and mode (string set 
+ *              to "brief" by default)
+ * @returns the history of commands and results (or just results) from the user
+ */
+export function REPLHistory(props: REPLHistoryProps) {
+  if (props.mode == "brief") { // then display only the results of each command,
+    return (                   // as an HTML table
+      <div className="repl-history">
+        {props.history.map((item, index) => ( // map for each separate result
+          <p><center><table>
+            {item.result.map((row, index) => ( // nested map for each row within result
+              <tr>{row.map((col, index) => ( // nested map for each datum in row
+                <td>{col}</td>
+              ))}
+              </tr>
+            ))}
+          </table></center></p>
         ))}
       </div>
     );
-  } else {
+  } else { // if we're in verbose mode, display both the commands and results
     return (
       <div className="repl-history">
-        {/* This is where command history will go */}
-        {/* TODO: To go through all the pushed commands... try the .map() function! */}
-        {/* CHANGED */}
-
-        {props.history.map((item, index) => (
+        {props.history.map((item, index) => ( // map for each separate command/result pair
           <p>
-            <b>Command:</b> {item.command}
+            <b>Command:</b>
+            <br></br>{item.command} {/**prints command*/}
             <br></br>
             <b>Result:</b>
-            <center>
-              <table>
-                {item.result.map((row, index) => (
-                  <tr>
-                    {row.map((col, index) => (
+            <center><table>
+              {item.result.map((row, index) => ( // map for each row in result
+                <tr>{row.map((col, index) => ( // map for each datum in row
                       <td>{col}</td>
                     ))}
-                  </tr>
-                ))}
-              </table>
-            </center>
+                </tr>
+              ))}
+            </table></center>
           </p>
         ))}
       </div>

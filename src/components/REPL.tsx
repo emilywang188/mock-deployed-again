@@ -3,36 +3,29 @@ import "../styles/main.css";
 import { REPLHistory } from "./REPLHistory";
 import { REPLInput } from "./REPLInput";
 
-/* 
-  You'll want to expand this component (and others) for the sprints! Remember 
-  that you can pass "props" as function arguments. If you need to handle state 
-  at a higher level, just move up the hooks and pass the state/setter as a prop.
-  
-  This is a great top level component for the REPL. It's a good idea to have organize all components in a component folder.
-  You don't need to do that for this gearup.
-*/
+/**
+ * Interface that represents a tuple of the command entered by the user, as well as the result
+ * of that command as a 2D array of strings.
+ */
 export interface InputObject {
   command: string;
   result: string[][];
 }
 
+/**
+ * Function that instantiates a REPLHistory and a REPLInput so each can appear onscreen.
+ * Defines history and its useState hook setHistory, as well as mode and its 
+ * useState hook setMode, so these can be passed into the REPLHistory/REPLInput.
+ * @returns 
+ */
 export default function REPL() {
-  // TODO: Add some kind of shared state that holds all the commands submitted.
-  // CHANGED
-
-
-  const [history, setHistory] = useState<InputObject[]>([]);
-  const [mode, setMode] = useState<string>("brief");
-
-
+  const [history, setHistory] = useState<InputObject[]>([]); // history and mode are shared
+  const [mode, setMode] = useState<string>("brief"); // states across REPL, REPLHistory, & REPLInput.
+  
   return (
     <div className="repl">
-      {/*This is where your REPLHistory might go... You also may choose to add it within your REPLInput 
-      component or somewhere else depending on your component organization. What are the pros and cons of each? */}
-      {/* CHANGED */}
       <REPLHistory history={history} mode={mode} />
       <hr></hr>
-      {/* CHANGED */}
       <REPLInput history={history} setHistory={setHistory} mode={mode} setMode={setMode}/>
     </div>
   );

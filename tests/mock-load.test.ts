@@ -27,23 +27,29 @@ test("load poke.csv", async ({ page }) => {
     .getByPlaceholder("Enter command here!")
     .fill("load_file poke.csv");
   await page.getByRole("button").click();
-  await(expect(page.getByTestId("output")).toContainText("poke.csv loaded successfully!"));
+  await(
+    expect(page.getByTestId("output")).toHaveText(
+      "poke.csv loaded successfully!Enter a command: Submitted 1 timesCurrent mode: brief"
+    )
+  );
   await(expect(page.getByTestId("output")).not.toContainText("Command: load_file poke.csv"));
 });
 
 /**
- * 
+ * Loads multiple csv files successfully
  */
 test("load multiple csv", async ({ page }) => {
   await page.getByPlaceholder("Enter command here!").fill("load_file poke.csv");
   await page.getByRole("button").click();
-  await expect(page.getByTestId("output")).toContainText(
-    "poke.csv loaded successfully!"
+  await expect(page.getByTestId("output")).toHaveText(
+    "poke.csv loaded successfully!Enter a command: Submitted 1 timesCurrent mode: brief"
   );
 
   await page.getByPlaceholder("Enter command here!").fill("load_file pizza.csv");
   await page.getByRole("button").click();
-  await expect(page.getByTestId("output")).toContainText("pizza.csv loaded successfully!")
+  await expect(page.getByTestId("output")).toHaveText(
+    "poke.csv loaded successfully!pizza.csv loaded successfully!Enter a command: Submitted 2 timesCurrent mode: brief"
+  );
 });
 
 /**
@@ -55,9 +61,9 @@ test("load error", async ({ page }) => {
     .fill("load poke.csv");
   await page.getByRole("button").click();
   await(
-    expect(page.getByTestId("output")).toContainText(
+    expect(page.getByTestId("output")).toHaveText(
       "Command not recognized. Recognized commands include 'mode', 'view', " +
-      "'load <filepath>', and 'search <optional column identifier> <value>'"
+        "'load <filepath>', and 'search <optional column identifier> <value>'Enter a command: Submitted 1 timesCurrent mode: brief"
     )
   );
   await(
@@ -76,8 +82,8 @@ test("load file doesn't exist", async ({ page }) => {
     .fill("load_file cookies.csv");
   await page.getByRole("button").click();
   await(
-    expect(page.getByTestId("output")).toContainText(
-      "Error: Failed to load cookies.csv. File doesn't exist."
+    expect(page.getByTestId("output")).toHaveText(
+      "Error: Failed to load cookies.csv. File doesn't exist.Enter a command: Submitted 1 timesCurrent mode: brief"
     )
   );
   await(
@@ -87,13 +93,21 @@ test("load file doesn't exist", async ({ page }) => {
   );
 });
 
+// /**
+//  * Loads multiple csv files successfully
+//  */
+// test("load multiple csv with errors", async ({ page }) => {
+//   await page.getByPlaceholder("Enter command here!").fill("load_file pizzazz.csv");
+//   await page.getByRole("button").click();
+//   await expect(page.getByTestId("output")).toHaveText(
+//     "poke.csv loaded successfully!Enter a command: Submitted 1 timesCurrent mode: brief"
+//   );
 
-// test('get started link', async ({ page }) => {
-//   await page.goto('https://playwright.dev/');
-
-//   // Click the get started link.
-//   await page.getByRole('link', { name: 'Get started' }).click();
-
-//   // Expects page to have a heading with the name of Installation.
-//   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
+//   await page.getByPlaceholder("Enter command here!").fill("load_file pizza.csv");
+//   await page.getByRole("button").click();
+//   await expect(page.getByTestId("output")).toHaveText(
+//     "poke.csv loaded successfully!pizza.csv loaded successfully!Enter a command: Submitted 2 timesCurrent mode: brief"
+//   );
 // });
+
+

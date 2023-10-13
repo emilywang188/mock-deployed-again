@@ -62,9 +62,9 @@ export function REPLInput(props: REPLInputProps) {
    *          as a 2D array of strings
    */
   function determineResult(commandString: string) {
-    const splitCommandString: string[] = splitSpacesExcludeQuotes(commandString);
-    const command = splitCommandString[0].toLowerCase();
-    switch (command) {
+    const splitCommandString: string[] = splitSpacesExcludeQuotes(commandString); // so the user
+    const command = splitCommandString[0].toLowerCase(); // can enter a search term with spaces, as long
+    switch (command) {                                  // as it's in quotes
       case "load_file": // if the user's command started with load_file
         if (splitCommandString.length != 2){ // if the user's input doesn't fit load format
           return [["Error: Invalid load request. Use the 'load_file <filepath>' command."]];

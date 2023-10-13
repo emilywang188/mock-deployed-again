@@ -11,12 +11,12 @@ To run Mock, navigate to our main directory `mock-emwang-kli154` and run the com
 the terminal, to which you can navigate to in a new browser page. This should load Mock. To navigate this program, you can interact with the input box (that which has
 "Enter command here!" as a placeholder), and the submit button. In the input box, you have a choice of four commands to input, with the following formats:
 
-- load_file <filename.csv>
+- load_file (filename.csv)
   - This command "loads" the given csv file by saving the file name and ensuring the file exists. If the command is called correctly, there will be a success message. If
     the file doesn't exist, there will be a message telling this to the user and the file path won't be saved.
 - view
   - This command displays the loaded csv file as a 2x2 HTML table. The file displayed will always be the most recent file loaded. If the user failed to successfully load a file, they will receive an error message instead of a table. If they call `view` with miscellaneous text after, they also get an error message.
-- search <optional column header or index> <value to search for>
+- search (optional column header or index) (value to search for)
   - This command, in theory, should return the search results of the user's query based on the file they've loaded, the optional column header/index, and their search value. If the user doesn't want to include a column header/index, they can just input "search <value to search for>", and if the column header and/or search value have multiple words, the user should surround the inquiry with quotation marks so our program can distinguish each term. If the user doesn't load a file before searching, they will receive an error message. Same if the user tries to search with more than three parameters, or less than two.
   - Because of the nature of Mock, our search results are primarily existing csvs that match the csvs we use for view--as a result, we don't have header return errors because we aren't checking whether the header actually exists in the csv (this is a backend thing).
 - mode
@@ -44,11 +44,11 @@ One new data structure we introduced for Mock was our `InputObject` that we use 
 
 We decided to make the result of our `InputObject` a 2D array of strings because this would make it easier for us to format our strings into an HTML table by using nested map functions (as if they were for-loops) in our `REPLHistory` to display the results.
 
-Our most important shared states between our `REPL`, `REPLHistory`, and `REPLInput` are the mode (a string "brief" or "verbose", the display setting the user currently is in), and the history (list of InputObjects of commands/results).
+Our most important shared states between our `REPL`, `REPLHistory`, and `REPLInput` are the mode (a string "brief" or "verbose", the display setting the user currently is in), and the history (list of InputObjects of commands/results). 
 
-We added the feature of displaying the current mode the user is in for ease of use, so the user doesn't get confused which mode they are in.
+We added the feature of displaying the current mode the user is in for ease of use, so the user doesn't get confused which mode they are in. We also decided that changing the mode of the user changes the display of everything in our history to its brief or verbose mode. We decided this from the perspective of the user, so that if the user were to forget what command they input for a certain result, changing the mode would then display the command as well as the result.(the alternative would be to only apply the mode change to the following command).
 
-Our `REPLInput` class has a
+Our `REPLInput` class has a helper function `determineResult()` that's called within the `handleSubmit()` function. We pass in the command string from the user, and based on the user input, use a switch case to decide what the return value should be for the user's result. We did this because there's a lot of logic and cases involved in what we return to the user, so we decided to split this up into a helper method for code readability. Because of that, we return whatever `determineResult()` outputs to `handleSubmit()`, which in turn saves that result as `myResult` and creates an `InputObject` to go in the REPLHistory.
 
 # Errors/bugs
 

@@ -104,7 +104,7 @@ export function REPLInput(props: REPLInputProps) {
         }
         return [["Mode changed!"]]; // swaps the mode using useState hook
       default: // if the user enters anything that doesn't start with one of our commands
-        return [["Command not recognized. Recognized commands include 'mode', 'view', 'load <filepath>', and 'search <optional column identifier> <value>'"]];
+        return [["Command not recognized. Recognized commands include 'mode', 'view', 'load_file <filepath>', and 'search <optional column identifier> <value>'"]];
     }
   }
 

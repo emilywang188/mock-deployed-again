@@ -87,7 +87,7 @@ test("load error", async ({ page }) => {
   await page.getByRole("button").click();
   await(
     expect(page.getByTestId("output")).toHaveText("Command:mode Result:Mode changed!"+
-    "Command:load poke.csv Result:Command not recognized. Recognized commands include 'mode', 'view', 'load <filepath>', " + 
+    "Command:load poke.csv Result:Command not recognized. Recognized commands include 'mode', 'view', 'load_file <filepath>', " + 
     "and 'search <optional column identifier> <value>'Enter a command: Submitted 2 timesCurrent mode: verbose"
     )
   );
@@ -100,7 +100,7 @@ test("load error", async ({ page }) => {
   await page.getByRole("button").click();
   await(
     expect(page.getByTestId("output")).toHaveText("Mode changed!Command not recognized. " + 
-    "Recognized commands include 'mode', 'view', 'load <filepath>', and 'search <optional column identifier> <value>'" +
+    "Recognized commands include 'mode', 'view', 'load_file <filepath>', and 'search <optional column identifier> <value>'" +
     "Mode changed!Enter a command: Submitted 3 timesCurrent mode: brief")
   );
 });

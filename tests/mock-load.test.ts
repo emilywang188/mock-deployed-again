@@ -37,7 +37,7 @@ test("garbage input", async ({ page }) => {
   await page.getByRole("button").click();
   await expect(page.getByTestId("output")).toHaveText(
     "Command not recognized. Recognized commands include 'mode', 'view', 'load_file <filepath>', " +
-      "and 'search <optional column identifier> <value>'Enter a command: Submitted 1 timeCurrent mode: brief"
+      "and 'search <optional column identifier> <value>'Enter a command: Submitted 1 timesCurrent mode: brief"
   );
 });
 
@@ -162,6 +162,44 @@ test("load file doesn't exist", async ({ page }) => {
   );
   await expect(page.getByTestId("output")).not.toContainText(
     "cookies.csv loaded successfully!"
+  );
+});
+
+/**
+ * Tests loading with excessive number of arguments.
+ */
+test("load file wrong num arguments", async ({ page }) => {
+  await page.getByPlaceholder("Enter command here!").fill("mode");
+  await page.getByRole("button").click();
+  await expect(page.getByTestId("output")).toHaveText(
+    "Command:mode Result:Mode changed!Enter a command: Submitted 1 timesCurrent mode: verbose"
+  );
+  await page
+    .getByPlaceholder("Enter command here!")
+    .fill("load_file pizza.csv yes slay");
+  await page.getByRole("button").click();
+  await expect(page.getByTestId("output")).toHaveText(
+    "Command:mode Result:Mode changed!Command:load_file pizza.csv yes slay Result:Error: Invalid load request. Use the 'load_file <filepath>' command." + 
+    "Enter a command: Submitted 2 timesCurrent mode: verbose"
+  );
+});
+
+/**
+ * Tests just calling load_file with no file name.
+ */
+test("load file no file given", async ({ page }) => {
+  await page.getByPlaceholder("Enter command here!").fill("mode");
+  await page.getByRole("button").click();
+  await expect(page.getByTestId("output")).toHaveText(
+    "Command:mode Result:Mode changed!Enter a command: Submitted 1 timesCurrent mode: verbose"
+  );
+  await page
+    .getByPlaceholder("Enter command here!")
+    .fill("load_file");
+  await page.getByRole("button").click();
+  await expect(page.getByTestId("output")).toHaveText(
+    "Command:mode Result:Mode changed!Command:load_file Result:Error: Invalid load request. Use the 'load_file <filepath>' command." + 
+    "Enter a command: Submitted 2 timesCurrent mode: verbose"
   );
 });
 
